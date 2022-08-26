@@ -14,14 +14,17 @@
       </li>
     </ul>
 
-    <input type="text" placeholder="请输入消息" v-model="msg" />
+    <input
+      type="text"
+      placeholder="请输入消息"
+      v-model="msg"
+    />
     <button @click="handleSendBtnClick">发送</button>
   </div>
 </template>
 
 <script>
 
-const ws = new WebSocket('ws://localhost:8000');
 
 export default {
   name: 'Home',
@@ -33,47 +36,15 @@ export default {
     }
   },
   mounted () {
-    this.username = localStorage.getItem('username');
-
-    if (!this.username) {
-      this.$router.push('/login');
-      return;
-    }
-
-    ws.addEventListener('open', this.handleWsOpen.bind(this), false);
-    ws.addEventListener('close', this.handleWsClose.bind(this), false);
-    ws.addEventListener('error', this.handleWsError.bind(this), false);
-    ws.addEventListener('message', this.handleWsMessage.bind(this), false);
+    this.$socketApi.getSock(this.getSocketResult())
   },
   methods: {
     handleSendBtnClick () {
-      const msg = this.msg;
-
-      if (!msg.trim().length) {
-        return;
-      }
-
-      ws.send(JSON.stringify({
-        id: new Date().getTime(),
-        user: this.username,
-        dateTime: new Date().getTime(),
-        msg: this.msg
-      }));
-
-      this.msg = '';
+      this.$socketApi.sendSock('dddd', this.getSocketResult)
     },
-    handleWsOpen (e) {
-      console.log('FE: WebSocket open', e);
-    },
-    handleWsClose (e) {  
-      console.log('FE: WebSocket close', e);
-    },
-    handleWsError (e) {  
-      console.log('FE: WebSocket error', e);
-    },
-    handleWsMessage (e) {
-      const msg = JSON.parse(e.data);
-      this.msgList.push(msg);
+    getSocketResult (res) {
+      if (!res) return
+      console.log(res)
     }
   }
 }

@@ -1,45 +1,42 @@
-const Ws = require('ws');
+const Ws = require('ws')
 
 ;((Ws) => {
-  
-  const server = new Ws.Server({ port: 8000 });
-
+  const server = new Ws.Server({ port: 8888 })
 
   const init = () => {
-    bindEvent();
+    bindEvent()
   }
 
-  function bindEvent () {
-    server.on('open', handleOpen);
-    server.on('close', handleClose);
-    server.on('error', handleError);
-    server.on('connection', handleConnection);
+  function bindEvent() {
+    server.on('open', handleOpen)
+    server.on('close', handleClose)
+    server.on('error', handleError)
+    server.on('connection', handleConnection)
   }
 
-  function handleOpen () {
-    console.log('BE: WebSocket open');
+  function handleOpen() {
+    console.log('BE: WebSocket open')
   }
 
-  function handleClose () {
-    console.log('BE: WebSocket close');
+  function handleClose() {
+    console.log('BE: WebSocket close')
   }
 
-  function handleError () {
-    console.log('BE: WebSocket error');
+  function handleError() {
+    console.log('BE: WebSocket error')
   }
 
-  function handleConnection (ws) {
-    console.log('BE: WebSocket connection');
+  function handleConnection(ws) {
+    console.log('BE: WebSocket connection')
 
-    ws.on('message', handleMessage);
+    ws.on('message', handleMessage)
   }
 
-  function handleMessage (msg) {
+  function handleMessage(msg) {
     server.clients.forEach((c) => {
-      c.send(msg);
+      c.send(msg)
     })
-
   }
 
-  init();
-})(Ws);
+  init()
+})(Ws)
